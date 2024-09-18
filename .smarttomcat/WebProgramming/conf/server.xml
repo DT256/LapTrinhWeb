@@ -17,11 +17,11 @@
 -->
 <!-- Note:  A "Server" is not itself a "Container", so you may not
      define subcomponents such as "Valves" at this level.
-     Documentation at /docs/config/server.html
+     Documentation at /docs/configs/server.html
  -->
 <Server port="8005" shutdown="SHUTDOWN">
   <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
-  <!-- Security listener. Documentation at /docs/config/listeners.html
+  <!-- Security listener. Documentation at /docs/configs/listeners.html
   <Listener className="org.apache.catalina.security.SecurityListener" />
   -->
   <!-- OpenSSL support using Tomcat Native -->
@@ -50,7 +50,7 @@
   <!-- A "Service" is a collection of one or more "Connectors" that share
        a single "Container" Note:  A "Service" is not itself a "Container",
        so you may not define subcomponents such as "Valves" at this level.
-       Documentation at /docs/config/service.html
+       Documentation at /docs/configs/service.html
    -->
   <Service name="Catalina">
 
@@ -63,8 +63,8 @@
 
     <!-- A "Connector" represents an endpoint by which requests are received
          and responses are returned. Documentation at :
-         HTTP Connector: /docs/config/http.html
-         AJP  Connector: /docs/config/ajp.html
+         HTTP Connector: /docs/configs/http.html
+         AJP  Connector: /docs/configs/ajp.html
          Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
     -->
     <Connector port="8080" protocol="HTTP/1.1"
@@ -115,7 +115,7 @@
          every request.  The Engine implementation for Tomcat stand alone
          analyzes the HTTP headers included with the request, and passes them
          on to the appropriate Host (virtual host).
-         Documentation at /docs/config/engine.html -->
+         Documentation at /docs/configs/engine.html -->
 
     <!-- You should set jvmRoute to support load-balancing via AJP ie :
     <Engine name="Catalina" defaultHost="localhost" jvmRoute="jvm1">
@@ -124,7 +124,7 @@
 
       <!--For clustering, please take a look at documentation at:
           /docs/cluster-howto.html  (simple how to)
-          /docs/config/cluster.html (reference documentation) -->
+          /docs/configs/cluster.html (reference documentation) -->
       <!--
       <Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
       -->
@@ -144,13 +144,13 @@
             unpackWARs="true" autoDeploy="true">
 
         <!-- SingleSignOn valve, share authentication between web applications
-             Documentation at: /docs/config/valve.html -->
+             Documentation at: /docs/configs/valve.html -->
         <!--
         <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
         -->
 
         <!-- Access log processes all example.
-             Documentation at: /docs/config/valve.html
+             Documentation at: /docs/configs/valve.html
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log" suffix=".txt"
