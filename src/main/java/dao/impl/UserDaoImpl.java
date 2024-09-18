@@ -99,7 +99,7 @@ public class UserDaoImpl implements IUserDao{
 
     @Override
     public void insertUser(UserModel user) {
-        String sql = "INSERT INTO Users(username,email, password, roleid) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO Users(username,email, password, roleid, createDate) VALUES (?,?,?,?,?)";
         try {
             conn = new DBConnectMySQL().getDatabaseConnection();
             ps = conn.prepareStatement(sql);
@@ -107,6 +107,7 @@ public class UserDaoImpl implements IUserDao{
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
             ps.setInt(4, user.getRoleid());
+            ps.setDate(5, user.getCreateDate());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
