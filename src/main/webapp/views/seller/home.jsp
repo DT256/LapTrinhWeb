@@ -5,12 +5,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-	<title>Manager</title>
+	<title>Seller</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
-	<h1>Welcome, ${sessionScope.username}!</h1>
+	<h1>Welcome, ${sessionScope.uname}!</h1>
 	<form action="${pageContext.request.contextPath}/logout" method="get">
 		<button type="submit" class="btn btn-primary">Logout</button>
 	</form>

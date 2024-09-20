@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="container">
-	<h1>Welcome, ${sessionScope.username}!</h1>
+	<h1>Welcome, ${sessionScope.uname}!</h1>
 	<form action="${pageContext.request.contextPath}/logout" method="get">
 		<button type="submit" class="btn btn-primary">Logout</button>
 	</form>
