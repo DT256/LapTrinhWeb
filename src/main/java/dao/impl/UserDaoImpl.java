@@ -99,15 +99,16 @@ public class UserDaoImpl implements IUserDao{
 
     @Override
     public void insertUser(UserModel user) {
-        String sql = "INSERT INTO Users(username,email, password, roleid, createDate) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO Users(username, email, fullname, password, roleid, createDate) VALUES (?,?,?,?,?,?)";
         try {
             conn = new DBConnectMySQL().getDatabaseConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword());
-            ps.setInt(4, user.getRoleid());
-            ps.setDate(5, user.getCreateDate());
+            ps.setString(3, user.getFullname());
+            ps.setString(4, user.getPassword());
+            ps.setInt(5, user.getRoleid());
+            ps.setDate(6, user.getCreateDate());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
