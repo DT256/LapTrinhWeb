@@ -1,19 +1,80 @@
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<html lang="vi">
 <head>
-    <title>Manager</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button#login-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button#register-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Welcome, ${sessionScope.username}!</h1>
-    <form action="${pageContext.request.contextPath}/logout" method="get">
-        <button type="submit" class="btn btn-primary">Logout</button>
-    </form>
-</div>
+<header>
+    <h1>Chào mừng đến với Website</h1>
+    <div class="auth-buttons">
+        <button id="register-btn">Đăng ký</button>
+        <button id="login-btn">Đăng nhập</button>
+    </div>
+</header>
+
+<main>
+    <p>Đây là trang chủ của website.</p>
+</main>
+
+<script>
+    document.getElementById('register-btn').addEventListener('click', function() {
+        window.location.href = window.location.href + '/register';
+    });
+    document.getElementById('login-btn').addEventListener('click', function() {
+        window.location.href = window.location.href + '/login';
+    });
+
+
+</script>
 </body>
 </html>
