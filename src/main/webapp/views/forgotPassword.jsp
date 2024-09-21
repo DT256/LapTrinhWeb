@@ -56,7 +56,7 @@
 
                             <!-- Back to login link -->
                             <div class="text-center">
-                                <p class="small fw-bold">Back to <a href="./login.jsp" class="link-danger">Login</a></p>
+                                <p class="small fw-bold">Back to <a href="${pageContext.request.contextPath }/login" class="link-danger">Login</a></p>
                             </div>
 
                         </form>
