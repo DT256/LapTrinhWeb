@@ -25,4 +25,21 @@ public class LogoutController  extends HttpServlet {
         }
         resp.sendRedirect("views/home.jsp");
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        session.removeAttribute("account");
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (Constant.COOKIE_REMEMBER.equals(cookie.getName())) {
+                    cookie.setMaxAge(0);
+                    resp.addCookie(cookie);
+                    break;
+                }
+            }
+        }
+        resp.sendRedirect("views/home.jsp");
+    }
 }
