@@ -122,7 +122,7 @@
     </div>
 
     <div class="container signin">
-        <p>Bạn đã có tài khoản? <a href="#">Đăng nhập</a>.</p>
+        <p>Bạn đã có tài khoản? <a href=${pageContext.request.contextPath }/login>Đăng nhập</a>.</p>
     </div>
 </form>
 </body>
