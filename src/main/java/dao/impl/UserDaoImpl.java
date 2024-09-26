@@ -30,10 +30,10 @@ public class UserDaoImpl implements IUserDao{
                 user.setEmail(rs.getString("email"));
                 user.setFullname(rs.getString("fullname"));
                 user.setPassword(rs.getString("password"));
-                user.setFullname(rs.getString("image"));
+                user.setImage(rs.getString("image"));
                 user.setCreateDate(rs.getDate("createDate"));
                 user.setRoleid(rs.getInt("roleid"));
-                user.setFullname(rs.getString("phone"));
+                user.setPhone(rs.getString("phone"));
             }
             return user;
 
@@ -58,10 +58,10 @@ public class UserDaoImpl implements IUserDao{
                 user.setEmail(rs.getString("email"));
                 user.setFullname(rs.getString("fullname"));
                 user.setPassword(rs.getString("password"));
-                user.setFullname(rs.getString("image"));
+                user.setImage(rs.getString("image"));
                 user.setCreateDate(rs.getDate("createDate"));
                 user.setRoleid(rs.getInt("roleid"));
-                user.setFullname(rs.getString("phone"));
+                user.setPhone(rs.getString("phone"));
             }
             return user;
         } catch (Exception e) {
@@ -84,10 +84,10 @@ public class UserDaoImpl implements IUserDao{
                 user.setEmail(rs.getString("email"));
                 user.setFullname(rs.getString("fullname"));
                 user.setPassword(rs.getString("password"));
-                user.setFullname(rs.getString("image"));
+                user.setImage(rs.getString("image"));
                 user.setCreateDate(rs.getDate("createDate"));
                 user.setRoleid(rs.getInt("roleid"));
-                user.setFullname(rs.getString("phone"));
+                user.setPhone(rs.getString("phone"));
                 users.add(user);
             }
             return users;
@@ -187,10 +187,10 @@ public class UserDaoImpl implements IUserDao{
                 user.setEmail(rs.getString("email"));
                 user.setFullname(rs.getString("fullname"));
                 user.setPassword(rs.getString("password"));
-                user.setFullname(rs.getString("image"));
+                user.setImage(rs.getString("image"));
                 user.setCreateDate(rs.getDate("createDate"));
                 user.setRoleid(rs.getInt("roleid"));
-                user.setFullname(rs.getString("phone"));
+                user.setPhone(rs.getString("phone"));
             }
             return user;
 
