@@ -23,7 +23,7 @@ public class LogoutController  extends HttpServlet {
                 }
             }
         }
-        resp.sendRedirect("views/home.jsp");
+        resp.sendRedirect("home");
     }
 
     @Override
@@ -40,6 +40,6 @@ public class LogoutController  extends HttpServlet {
                 }
             }
         }
-        resp.sendRedirect("views/home.jsp");
+        resp.sendRedirect("home");
     }
 }
