@@ -74,6 +74,13 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- https://mvnrepository. com/artifact/org.sitemesh/sitemesh -->
+    <dependency>
+      <groupId>org.sitemesh</groupId>
+      <artifactId>sitemesh</artifactId>
+      <version>3.2.1</version>
+    </dependency>
+
   </dependencies>
 
   <build>
