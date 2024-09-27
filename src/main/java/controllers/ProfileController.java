@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import models.UserModel;
+import services.IUserService;
+import services.impl.UserServiceImpl;
 import utils.Constant;
 
 import java.io.File;
@@ -19,30 +21,33 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("views/web/profile.jsp").forward(req, resp);
-        HttpSession session= req.getSession();
-        UserModel u=(UserModel) session.getAttribute("account");
-        System.out.println(u);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String uploadPath = "D:\\upload"; //upload vào thư mục bất kỳ
+        String uploadPath = "D:" + File.separator + "upload";//upload vào thư mục bất kỳ
         //String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
         //upload vào thư mục project
+        String username = req.getParameter("username");
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists())
             uploadDir.mkdir();
         try {
             String fileName = "";
             for (Part part : req.getParts()) {
-                fileName = getFileName(part);
-                part.write(uploadPath + fileName);
+                String partName = part.getName();
+                if(partName.equals("image")){
+                    fileName = getFileName(part);
+                    part.write(uploadPath + File.separator + fileName);
+                }
             }
             req.setAttribute("message", "File " + fileName + " has uploaded successfully!");
+            IUserService userService = new UserServiceImpl();
+            userService.updateImage(username, fileName);
         } catch (FileNotFoundException fne) {
             req.setAttribute("message", "There was an error: " + fne.getMessage());
         }
-        getServletContext().getRequestDispatcher("/views/result.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/views/web/profile.jsp").forward(req, resp);
     }
 
     private String getFileName(Part part) {
