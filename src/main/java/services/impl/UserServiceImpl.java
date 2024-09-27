@@ -35,6 +35,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public boolean updateImage(String username, String newIamge) {
+        return userDao.updateImage(username, newIamge);
+    }
+
+    @Override
     public void insertUser(UserModel user) {
         userDao.insertUser(user);
     }
