@@ -137,7 +137,7 @@ public class UserDaoImpl implements IUserDao{
 
     @Override
     public boolean updateImage(String username, String imageName) {
-        String sql = "UPDATE Users SET password = ? WHERE username = ?";
+        String sql = "UPDATE Users SET image = ? WHERE username = ?";
         boolean isUpdated = false;
         try {
             conn = new DBConnectMySQL().getDatabaseConnection();
