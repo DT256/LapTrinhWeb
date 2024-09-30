@@ -20,7 +20,8 @@ import java.util.List;
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50) // 50MB
 
-@WebServlet(urlPatterns = {"/admin/categories", "/admin/category/add", "/admin/category/insert", "/admin/category/edit" })
+@WebServlet(urlPatterns = {"/admin/categories", "/admin/category/add", "/admin/category/insert",
+        "/admin/category/edit", "/admin/category/update" })
 public class CategoryController extends HttpServlet {
     ICategoryService categoryService = new CategoryServiceImpl();
     @Override
@@ -51,6 +52,10 @@ public class CategoryController extends HttpServlet {
         String url = req.getRequestURI();
         CategoryModel category = new CategoryModel();
 
+        String fname = "";
+        String uploadPath = Constant.ULOAD_DIRECTORY;
+        File uploadDir = new File(uploadPath);
+
         if(url.contains("/admin/category/insert")){
             //lay du lieu tu form
             String categoryname = req.getParameter("categoryname");
@@ -61,9 +66,6 @@ public class CategoryController extends HttpServlet {
             category.setCategoryname(categoryname);
             category.setStatus(status);
             //Xu li anh
-            String fname = "";
-            String uploadPath = Constant.ULOAD_DIRECTORY;
-            File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
@@ -71,13 +73,9 @@ public class CategoryController extends HttpServlet {
                 Part part = req.getPart("image1");
                 // part.write(uploadPath + "categories/" +fimename);
                 if(part.getSize() > 0){
-                    String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
-                    int index = filename.lastIndexOf(".");
-                    String ext = filename.substring(index+ 1);
-                    fname = System.currentTimeMillis() + "." + ext;
+                    fname = this.getname(part);
                     part.write(uploadPath + File.separator + fname);
                     category.setImage(fname);
-                    System.out.println(fname);
                 } else if (image != null) {
                     category.setImage(image);
                 }
@@ -89,9 +87,51 @@ public class CategoryController extends HttpServlet {
             }
             // goi phuong thuc insert trong service
             categoryService.insert(category);
-            System.out.println(category);
+            // quay ve view
+            resp.sendRedirect(req.getContextPath() + "/admin/categories");
+        } else if (url.contains("/admin/category/update")) {
+            int id = Integer.parseInt(req.getParameter("categoryid"));
+            String categoryname = req.getParameter("categoryname");
+            int status = Integer.parseInt(req.getParameter("status"));
+            String image = req.getParameter("image");
+
+            // dua du lieu vao model
+            category.setCategoryid(id);
+            category.setCategoryname(categoryname);
+            category.setStatus(status);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+            try{
+                Part part = req.getPart("image1");
+                if(part.getSize() > 0){
+                    fname = this.getname(part);
+                    part.write(uploadPath + File.separator + fname);
+                    category.setImage(fname);
+                } else if (image != null) {
+                    category.setImage(image);
+                }
+                else {
+                    category.setImage("avatar.jpg");
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            // goi phuong thuc insert trong service
+            categoryService.update(category);
+            //System.out.println(category);
             // quay ve view
             resp.sendRedirect(req.getContextPath() + "/admin/categories");
         }
+    }
+
+    public String getname(Part part){
+        String fname ="";
+        String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+        int index = filename.lastIndexOf(".");
+        String ext = filename.substring(index+ 1);
+        fname = System.currentTimeMillis() + "." + ext;
+        return fname;
     }
 }
