@@ -21,7 +21,6 @@ public class DownloadImageController extends HttpServlet {
         String fileName = req.getParameter("frame");
         File file = new File(Constant.ULOAD_DIRECTORY + File.separator + fileName);
         resp.setContentType("image/jpeg");
-        System.out.println(file.getAbsolutePath());
         if (file.exists()) {
             IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
         }
