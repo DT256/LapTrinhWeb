@@ -21,7 +21,7 @@ import java.util.List;
         maxRequestSize = 1024 * 1024 * 50) // 50MB
 
 @WebServlet(urlPatterns = {"/admin/categories", "/admin/category/add", "/admin/category/insert",
-        "/admin/category/edit", "/admin/category/update" })
+        "/admin/category/edit", "/admin/category/update", "/admin/category/delete" })
 public class CategoryController extends HttpServlet {
     ICategoryService categoryService = new CategoryServiceImpl();
     @Override
@@ -42,6 +42,11 @@ public class CategoryController extends HttpServlet {
             CategoryModel category = categoryService.findById(id);
             req.setAttribute("cate", category);
             req.getRequestDispatcher("/views/admin/category-edit.jsp").forward(req, resp);
+        }
+        else if (url.contains("/admin/category/delete")) {
+            int id  = Integer.parseInt(req.getParameter("id"));
+            categoryService.delete(id);
+            resp.sendRedirect(req.getContextPath() + "/admin/categories");
         }
     }
 
