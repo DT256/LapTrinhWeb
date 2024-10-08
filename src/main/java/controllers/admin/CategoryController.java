@@ -1,5 +1,6 @@
 package controllers.admin;
 
+import entity.Category;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -7,7 +8,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import models.CategoryModel;
 import services.ICategoryService;
 import services.impl.CategoryServiceImpl;
 import utils.Constant;
@@ -31,7 +31,7 @@ public class CategoryController extends HttpServlet {
 
         String url = req.getRequestURI();
         if(url.contains("/admin/categories")){
-            List<CategoryModel> list = categoryService.findAll();
+            List<Category> list = categoryService.findAll();
             req.setAttribute("listCategory", list);
             req.getRequestDispatcher("/views/admin/category-list.jsp").forward(req, resp);
         } else if (url.contains("/admin/category/add")) {
@@ -39,13 +39,17 @@ public class CategoryController extends HttpServlet {
         }
         else if (url.contains("/admin/category/edit")) {
             int id  = Integer.parseInt(req.getParameter("id"));
-            CategoryModel category = categoryService.findById(id);
+            Category category = categoryService.findById(id);
             req.setAttribute("cate", category);
             req.getRequestDispatcher("/views/admin/category-edit.jsp").forward(req, resp);
         }
         else if (url.contains("/admin/category/delete")) {
             int id  = Integer.parseInt(req.getParameter("id"));
-            categoryService.delete(id);
+            try {
+                categoryService.delete(id);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             resp.sendRedirect(req.getContextPath() + "/admin/categories");
         }
     }
@@ -55,7 +59,7 @@ public class CategoryController extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         String url = req.getRequestURI();
-        CategoryModel category = new CategoryModel();
+        Category category = new Category();
 
         String fname = "";
         String uploadPath = Constant.ULOAD_DIRECTORY;
@@ -80,12 +84,12 @@ public class CategoryController extends HttpServlet {
                 if(part.getSize() > 0){
                     fname = this.getname(part);
                     part.write(uploadPath + File.separator + fname);
-                    category.setImage(fname);
+                    category.setImages(fname);
                 } else if (image != null) {
-                    category.setImage(image);
+                    category.setImages(image);
                 }
                 else {
-                    category.setImage("avatar.jpg");
+                    category.setImages("avatar.jpg");
                 }
             } catch (Exception e){
                 e.printStackTrace();
@@ -100,6 +104,9 @@ public class CategoryController extends HttpServlet {
             int status = Integer.parseInt(req.getParameter("status"));
             String image = req.getParameter("image");
 
+            category = categoryService.findById(id);
+
+
             // dua du lieu vao model
             category.setCategoryid(id);
             category.setCategoryname(categoryname);
@@ -113,19 +120,15 @@ public class CategoryController extends HttpServlet {
                 if(part.getSize() > 0){
                     fname = this.getname(part);
                     part.write(uploadPath + File.separator + fname);
-                    category.setImage(fname);
-                } else if (image != null) {
-                    category.setImage(image);
-                }
-                else {
-                    category.setImage("avatar.jpg");
+                    category.setImages(fname);
+                } else if (!image.isEmpty()) {
+                    category.setImages(image);
                 }
             } catch (Exception e){
                 e.printStackTrace();
             }
             // goi phuong thuc insert trong service
             categoryService.update(category);
-            //System.out.println(category);
             // quay ve view
             resp.sendRedirect(req.getContextPath() + "/admin/categories");
         }
