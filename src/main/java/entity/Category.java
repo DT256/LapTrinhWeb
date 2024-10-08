@@ -29,7 +29,7 @@ public class Category implements Serializable {
     private String images;
 
 
-    private String status;
+    private int status;
 
     //bi-directional many-to-one association to Video
     @OneToMany(mappedBy="category")
@@ -39,15 +39,23 @@ public class Category implements Serializable {
     public Video addVideo(Video video) {
         getVideos().add(video);
         video.setCategory(this);
-
         return video;
     }
 
     public Video removeVideo(Video video) {
-
-
         getVideos().remove(video);
         video.setCategory(null);
         return video;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "categoryid=" + categoryid +
+                ", categoryname='" + categoryname + '\'' +
+                ", images='" + images + '\'' +
+                ", status=" + status +
+                ", videos=" + videos +
+                '}';
     }
 }
