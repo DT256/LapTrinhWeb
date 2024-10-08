@@ -2,6 +2,7 @@ package services.impl;
 
 import dao.ICategoryDao;
 import dao.impl.CategoryDaoImpl;
+import entity.Category;
 import models.CategoryModel;
 import services.ICategoryService;
 
@@ -10,50 +11,47 @@ import java.util.List;
 public class CategoryServiceImpl implements ICategoryService {
     public ICategoryDao categoryDao = new CategoryDaoImpl();
     @Override
-    public List<CategoryModel> findAll() {
+    public List<Category> findAll() {
         return categoryDao.findAll();
     }
 
     @Override
-    public CategoryModel findById(int id) {
+    public Category findById(int id) {
         return categoryDao.findById(id);
     }
 
     @Override
-    public CategoryModel findByName(String name) {
+    public Category findByName(String name) {
         return categoryDao.findByName(name);
     }
 
     @Override
-    public List<CategoryModel> searchByName(String keyword) {
+    public List<Category> searchByName(String keyword) {
         return categoryDao.searchByName(keyword);
     }
 
     @Override
-    public void insert(CategoryModel category) {
+    public void insert(Category category) {
         // goi ham ktra trung name
-        CategoryModel categoryModel = this.findByName(category.getCategoryname());
-        System.out.println(categoryModel);
-        if (categoryModel.getCategoryname() == null) {
+        Category cate = this.findByName(category.getCategoryname());
+        if (cate == null) {
             categoryDao.insert(category);
         }
     }
 
+
     @Override
-    public void update(CategoryModel category) {
-        CategoryModel categoryModel = this.findByName(category.getCategoryname());
-        if (categoryModel != null) {
+    public void update(Category category) {
+        //categoryDao.update(category);
+        Category cate = this.findByName(category.getCategoryname());
+        System.out.println(cate == null);
+        if (cate == null) {
             categoryDao.update(category);
         }
     }
 
     @Override
-    public void updateStatus(int id, int status) {
-        categoryDao.updateStatus(id, status);
-    }
-
-    @Override
-    public void delete(int id) {
+    public void delete(int id) throws Exception {
         categoryDao.delete(id);
     }
 }
