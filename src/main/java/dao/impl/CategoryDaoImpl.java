@@ -1,194 +1,140 @@
 package dao.impl;
 
-import configs.DBConnectMySQL;
-import dao.ICategoryDao;
-import models.CategoryModel;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.*;
+import configs.JPAConfig;
+import dao.ICategoryDao;
+import entity.Category;
+import models.CategoryModel;
+import services.ICategoryService;
+import services.impl.CategoryServiceImpl;
+
 public class CategoryDaoImpl implements ICategoryDao {
-    public Connection connection = null;
-    public PreparedStatement preparedStatement = null;
-    public ResultSet resultSet = null;
     @Override
-    public List<CategoryModel> findAll() {
-        String sql = "select * from Categories";
-        List<CategoryModel> list = new ArrayList<CategoryModel>();
+    public void insert(Category category) {
+        EntityManager enma = JPAConfig.getEntityManager();
+        EntityTransaction trans = enma.getTransaction();
         try {
-            connection = new DBConnectMySQL().getDatabaseConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                CategoryModel category = new CategoryModel();
-                category.setCategoryid(resultSet.getInt("categoryid"));
-                category.setCategoryname(resultSet.getString("categoryname"));
-                category.setImage(resultSet.getString("image"));
-                category.setStatus(resultSet.getInt("status"));
-                list.add(category);
-            }
-            connection.close();
-            preparedStatement.close();
-            resultSet.close();
-            return list;
-        }
-        catch (Exception e) {
+            trans.begin();
+            //gọi phuong thức để insert, update, delete
+            enma.persist(category);// ham insert
+            trans.commit();
+        } catch (Exception e) {
             e.printStackTrace();
+            trans.rollback();
+            throw e;
+        } finally {
+            enma.close();
         }
-        return null;
     }
 
     @Override
-    public CategoryModel findById(int id) {
-        String sql = "select * from Categories where categoryid = ?";
-        CategoryModel category = new CategoryModel();
+    public void update(Category category) {
+        EntityManager enma = JPAConfig.getEntityManager();
+        EntityTransaction trans = enma.getTransaction();
         try {
-            connection = new DBConnectMySQL().getDatabaseConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                category.setCategoryid(resultSet.getInt("categoryid"));
-                category.setCategoryname(resultSet.getString("categoryname"));
-                category.setImage(resultSet.getString("image"));
-                category.setStatus(resultSet.getInt("status"));
+            trans.begin();
+            //gọi phuong thức để insert, update, delete
+            enma.merge(category); // ham update
+            trans.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            trans.rollback();
+            throw e;
+        } finally {
+            enma.close();
+        }
+    }
+
+
+    @Override
+    public void delete(int cateid) throws Exception {
+        EntityManager enma = JPAConfig.getEntityManager();
+        EntityTransaction trans = enma.getTransaction();
+        try {
+            trans.begin();
+            //gọi phuong thức để insert, update, delete
+            Category category = enma.find(Category.class, cateid);
+            if (category != null) {
+                enma.remove(category);
+            } else {
+                throw new Exception("Không tìm thấy");
             }
-            connection.close();
-            preparedStatement.close();
-            resultSet.close();
+            trans.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            trans.rollback();
+            throw e;
+        } finally {
+            enma.close();
+        }
+    }
+
+    @Override
+    public Category findById(int cateid) {
+        EntityManager enma = JPAConfig.getEntityManager();
+        Category category = enma.find(Category.class, cateid);
+        return category;
+    }
+
+    @Override
+    public List<Category> findAll() {
+        EntityManager enma = JPAConfig.getEntityManager();
+        TypedQuery<Category> query = enma.createNamedQuery("Category.findAll", Category.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Category> searchByName(String catname) {
+        EntityManager enma = JPAConfig.getEntityManager();
+        String jpql = "SELECT c FROM Category c WHERE c.categoryname like :catename";
+        TypedQuery<Category> query = enma.createQuery(jpql, Category.class);
+        query.setParameter("catename", "%" + catname + "%");
+        return query.getResultList();
+    }
+
+    @Override
+    public Category findByName(String catename) {
+        EntityManager enma = JPAConfig.getEntityManager();
+        try {
+            String jpql = "SELECT c FROM Category c WHERE c.categoryname = :name";
+            Category category = enma.createQuery(jpql, Category.class)
+                    .setParameter("name", catename)
+                    .getSingleResult();
             return category;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
-    public CategoryModel findByName(String name) {
-        String sql = "select * from Categories where categoryname = ?";
-        CategoryModel category = new CategoryModel();
-        try {
-            connection = new DBConnectMySQL().getDatabaseConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, name);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                category.setCategoryid(resultSet.getInt("categoryid"));
-                category.setCategoryname(resultSet.getString("categoryname"));
-                category.setImage(resultSet.getString("image"));
-                category.setStatus(resultSet.getInt("status"));
-            }
-            connection.close();
-            preparedStatement.close();
-            resultSet.close();
-            return category;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public List<CategoryModel> searchByName(String keyword) {
-        String sql = "select * from Categories where categoryname like ?";
-        List<CategoryModel> list = new ArrayList<CategoryModel>();
-        try {
-            connection = new DBConnectMySQL().getDatabaseConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, "%" + keyword + "%");
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                CategoryModel category = new CategoryModel();
-                category.setCategoryid(resultSet.getInt("categoryid"));
-                category.setCategoryname(resultSet.getString("categoryname"));
-                category.setImage(resultSet.getString("image"));
-                category.setStatus(resultSet.getInt("status"));
-                list.add(category);
-            }
-            connection.close();
-            preparedStatement.close();
-            resultSet.close();
-            return list;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public void insert(CategoryModel category) {
-        String sql = "insert into Categories(categoryname,image,status) values(?,?,?)";
-        try {
-            connection = new DBConnectMySQL().getDatabaseConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, category.getCategoryname());
-            preparedStatement.setString(2, category.getImage());
-            preparedStatement.setInt(3, category.getStatus());
-            preparedStatement.executeUpdate();
-            connection.close();
-            preparedStatement.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        } catch (NoResultException e) {
+            System.out.println("Không tìm thấy Category với name: " + catename);
+            return null;
+        } finally {
+            enma.close();
         }
     }
 
     @Override
-    public void update(CategoryModel category) {
-        String sql = "update Categories set categoryname=?,image=?,status=? where categoryid = ?";
-        try {
-            connection = new DBConnectMySQL().getDatabaseConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, category.getCategoryname());
-            preparedStatement.setString(2, category.getImage());
-            preparedStatement.setInt(3, category.getStatus());
-            preparedStatement.setInt(4, category.getCategoryid());
-            preparedStatement.executeUpdate();
-            connection.close();
-            preparedStatement.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+    public List<Category> findAll(int page, int pagesize) {
+        EntityManager enma = JPAConfig.getEntityManager();
+        TypedQuery<Category> query = enma.createNamedQuery("Category.findAll", Category.class);
+        query.setFirstResult(page * pagesize);
+        query.setMaxResults(pagesize);
+        return query.getResultList();
     }
 
     @Override
-    public void updateStatus(int id, int status) {
-        String sql = "update Categories set status=? where categoryid = ?";
-        try {
-            connection = new DBConnectMySQL().getDatabaseConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, status);
-            preparedStatement.setInt(2, id);
-            preparedStatement.executeUpdate();
-            connection.close();
-            preparedStatement.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+    public int count() {
+        EntityManager enma = JPAConfig.getEntityManager();
+        String jpql = "SELECT count(c) FROM Category c";
+        Query query = enma.createQuery(jpql);
+        return ((Long) query.getSingleResult()).intValue();
     }
 
-    @Override
-    public void delete(int id) {
-        String sql = "delete from Categories where categoryid = ?";
-        try {
-            connection = new DBConnectMySQL().getDatabaseConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            connection.close();
-            preparedStatement.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+
+    public static void main(String[] args) {
+        ICategoryService s = new CategoryServiceImpl();
+        Category c = s.findByName("123456");
+        System.out.println(c == null);
+        System.out.println(c.getCategoryid());
+        System.out.println(c.getCategoryname());
+        System.out.println(c.getImages());
     }
 }
