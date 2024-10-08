@@ -13,12 +13,12 @@
     <tr>
       <td>${STT.index+1 }</td>
 
-      <c:if test = "${cate.image.substring(0,5) == 'https'}">
-        <c:url value="${cate.image}" var="imgUrl"></c:url>
+      <c:if test = "${cate.images.substring(0,5) == 'https'}">
+        <c:url value="${cate.images}" var="imgUrl"></c:url>
       </c:if>
 
-      <c:if test = "${cate.image.substring(0,5) != 'https'}">
-        <c:url value="/image?frame=${cate.image}" var="imgUrl"></c:url>
+      <c:if test = "${cate.images.substring(0,5) != 'https'}">
+        <c:url value="/image?frame=${cate.images}" var="imgUrl"></c:url>
       </c:if>
 
       <td><img height="150" width="200" src= "${imgUrl}" /></td>

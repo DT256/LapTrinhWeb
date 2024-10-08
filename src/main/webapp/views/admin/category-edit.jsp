@@ -14,12 +14,12 @@
   <input type="file" id="image1" name="image1" onchange = "chooseFile(this)"> <br>
 
 
-  <c:if test="${cate.image.substring(0,5) =='https'}">
-    <c:url value="${cate.image}" var="imgUrl"></c:url>
+  <c:if test="${cate.images.substring(0,5) =='https'}">
+    <c:url value="${cate.images}" var="imgUrl"></c:url>
   </c:if>
 
-  <c:if test="${cate.image.substring(0,5) !='https'}">
-    <c:url value="/image?frame=${cate.image}" var="imgUrl"></c:url>
+  <c:if test="${cate.images.substring(0,5) !='https'}">
+    <c:url value="/image?frame=${cate.images}" var="imgUrl"></c:url>
   </c:if>
 
   <img id="HinhAnh" height="150" width="200" src="${imgUrl}"/><br>
