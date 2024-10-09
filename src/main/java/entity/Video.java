@@ -16,8 +16,9 @@ import java.io.Serializable;
 @NamedQuery(name="Video.findAll", query="SELECT v FROM Video v")
 public class Video implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VideoId")
-    private String videoId;
+    private int videoId;
 
     @Column(name = "Active")
     private int active;
@@ -32,10 +33,8 @@ public class Video implements Serializable {
     @Column(name = "Title", columnDefinition = "nvarchar(255) null")
     private String title;
 
-
     @Column(name = "Views")
     private int views;
-
 
     //bi-directional many-to-one association to Category
     @ManyToOne
@@ -43,8 +42,16 @@ public class Video implements Serializable {
 
     private Category category;
 
-
-
-
-
+    @Override
+    public String toString() {
+        return "Video{" +
+                "videoId='" + videoId + '\'' +
+                ", active=" + active +
+                ", description='" + description + '\'' +
+                ", poster='" + poster + '\'' +
+                ", title='" + title + '\'' +
+                ", views=" + views +
+                ", category=" + category +
+                '}';
+    }
 }
